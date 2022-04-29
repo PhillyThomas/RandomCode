@@ -24,6 +24,16 @@
 		.leftmenu Button { width:2rem; height:2rem; border:white; background:none; transition:440ms; padding:5px; }
 		.leftmenu Button:hover { background:#f5f8fa; border:1px solid #d2d4d4; }
 		.leftmenu Span { width:5rem; text-align:center; font-family: 'Avenir Next LT Pro', sans-serif; font-weight:600; line-height: normal; -webkit-font-smoothing: antialiased; font-size:15px; color: #33475b; text-transform:none;}
+		.AS_Text { width:60%; height:auto; background:rgb(255,255,255); border-radius:6px;}
+		.AS_Text h1 { text-align: center; font-family: 'avenir-next-lt-pro', sans-serif; text-transform:uppercase; font-size:15px; }
+		.AS_Text p { text-align:center; font-family: 'avenir-next-lt-pro', sans-serif; font-size:13px; }
+		.buttonbar { width:100%; display:flex; gap:1rem; justify-content:center; align-items:center; margin:1rem;}
+		.buttonbar button {width:10rem; height:2.7rem; border-radius:6px; }
+		.buttonbar .yes { background:rgb(175, 219, 175); border:1px solid green; }
+		.buttonbar .no { background:rgb(247, 167, 167); border:1px solid red; }
+		.buttonbar button:hover{
+			transform: translateY(2px);
+		}
 	</style>
 </head>
 
@@ -32,6 +42,19 @@
 	<div class="overlay" id="overlay">
 		<button id="closeOverlay">Close</button>
 		<textarea id="overlayTextArea">TestTesttest</textarea>
+	</div>
+
+	<div class="overlay" id="autoSaveOverlay">
+		<div class="AS_Text">
+			<h1>Auto Save Data found!</h1>
+			<p>
+				Would you like to reload your work to continue where you left off?
+			</p>
+			<div class="buttonbar">
+				<button class="yes" id="loadAS">Yes, reload my save</button>
+				<button class="no" id="closeASOverlay">No, delete my auto save and start again</button>
+			</div>
+		</div>
 	</div>
 
 	<div class="topbar" style="display:flex; align-items:center;">
@@ -95,18 +118,61 @@
 		<button id="addNewProperty">Add New Property</button>
 		<button id="cloneLastProperty">Clone Last Property</button>
 		<button id="debugFill">Debug Fill</button>
+		<button id="debugDestroyLS">Delete local storage</button>
 	</div>
 
 </body>
 
 <script>
+	var autoSaveVar = 0;
 
-	
+	if(localStorage.getItem('data')){
+		console.log("Data exists");
+		console.log("Autosave from: " + localStorage.getItem('date'));
+		console.log(localStorage.getItem('data'));
+	} else {
+		$('#autoSaveOverlay').toggle();
+		autoSave(1);
+	}
+
+	function autoSave(onOff){
+		switch(onOff){
+			case 0: 
+				clearInterval(autoSaveVar);
+				break;
+			case 1:
+			autoSaveVar = setInterval(function(){
+				localStorage.setItem('data', createJSONstring());
+				localStorage.setItem('date', new Date().toLocaleString());
+			}, 5000);
+			break;
+		}
+		return;
+	}
+
 	var propertyList = [];
-
+	var filteredPropertyList;
 	var $keyArray = [0,1];	//tracks the keys of all existing property rows. 0 = 'deleted'.
 	var $currentNumber = 1;	//tracks the current number of items used when creating properties
 	$('#overlay').toggle();
+	
+
+	$('#loadAS').click(function(){
+		$('#autoSaveOverlay').toggle();
+		loadFromLocalStorage();
+	});
+
+	$('#closeASOverlay').click(function(){
+		$('#autoSaveOverlay').toggle();
+		localStorage.clear();
+		console.log("Local Storage Cleared");
+		autoSave(1);
+	});
+
+	$('#debugDestroyLS').click(function(){
+		localStorage.clear();
+		console.log("Local Storage Cleared");
+	});
 
 	$('#debugFill').click(function(){
 		var keyArr = [
@@ -139,7 +205,32 @@
 		}
 	})
 
-	$('#createCode').click(function(){
+	function loadFromLocalStorage(){
+		//	Grabs data from local storage and parses it back into a JS Object
+		var tempData = JSON.parse(localStorage.getItem('data'));
+		loadJSON(tempData);
+		autoSave(1);
+	}
+
+	function loadJSON(data){
+		for(i=1; i<data.length; i++){
+			newPropertyRow();
+		}
+		for(i=0; i<data.length; i++){
+			document.querySelector('#name'+(i+1)).value = data[i].name;
+			document.querySelector('#label'+(i+1)).value = data[i].label;
+			document.querySelector('#type'+(i+1)).value = data[i].type;
+			document.querySelector('#fieldType'+(i+1)).value = data[i].fieldType;
+			document.querySelector('#groupName'+(i+1)).value = data[i].groupName;
+			document.querySelector('#description'+(i+1)).value = data[i].description;
+			document.querySelector('#options'+(i+1)).value = data[i].options;
+			document.querySelector('#hasUniqueValue'+(i+1)).value = data[i].hasUniqueValue;
+			document.querySelector('#hidden'+(i+1)).value = data[i].hidden;
+			document.querySelector('#formField'+(i+1)).value = data[i].formField;
+		}
+	}
+
+	function createJSON(){
 		propertyList = [];
 		for(i=0; i<$currentNumber; i++){
 			var tempArr = [
@@ -154,28 +245,60 @@
 				$('#hidden'+(i+1)).val(),
 				$('#formField'+(i+1)).val()
 			];
-
 			// null and undefined check 
 			if(tempArr != null && tempArr[0] != undefined){
 				propertyList.push({"name":tempArr[0], "label":tempArr[1], "type":tempArr[2], "fieldType":tempArr[3], "groupName":tempArr[4], "description":tempArr[5], "options":tempArr[6], "hasUniqueValue":tempArr[7], "hidden":tempArr[8], "formField":tempArr[9]});
 			}
-		}
+		}	
+	}
 
-		$('#overlay').toggle();
-		$('#overlayTextArea').empty();
+	function createJSONstring(){
+		propertyList = [];
+		for(i=0; i<$currentNumber; i++){
+			var tempArr = [
+				$('#name'+(i+1)).val(),
+				$('#label'+(i+1)).val(),
+				$('#type'+(i+1)).val(),
+				$('#fieldType'+(i+1)).val(),
+				$('#groupName'+(i+1)).val(),
+				$('#description'+(i+1)).val(),
+				$('#options'+(i+1)).val(),
+				$('#hasUniqueValue'+(i+1)).val(),
+				$('#hidden'+(i+1)).val(),
+				$('#formField'+(i+1)).val()
+			];
+			// null and undefined check 
+			if(tempArr != null && tempArr[0] != undefined){
+				propertyList.push({"name":tempArr[0], "label":tempArr[1], "type":tempArr[2], "fieldType":tempArr[3], "groupName":tempArr[4], "description":tempArr[5], "options":tempArr[6], "hasUniqueValue":tempArr[7], "hidden":tempArr[8], "formField":tempArr[9]});
+			}
+		}	
+		return JSON.stringify(propertyList);
+	}
 
-		
-
-		//	removes any "null" objects from  propertyList
-		var filteredPropertyList = propertyList.filter(function (el) {
-			return el != null;
-		})
-
+	function sendJSON(){
 		// Send json to sendPOSTreq
 		sendPOSTreq(filteredPropertyList);
+	}
 
+	function filterJSON(){
+		//	removes any "null" objects from  propertyList
+		filteredPropertyList = propertyList.filter(function (el) {
+			return el != null;
+		})
+	}
+
+	function displayJSON(){
+		$('#overlay').toggle();
+		$('#overlayTextArea').empty();
 		//	writes the formatted JSON to #overlayTextArea
 		$('#overlayTextArea').append(JSON.stringify(filteredPropertyList, null, "\t"));
+	}
+
+	$('#createCode').click(function(){
+		createJSON();
+		filterJSON();
+		sendJSON();
+		displayJSON();
 	});
 
 	$('#closeOverlay').click(function(){
@@ -183,6 +306,10 @@
 	});
 
 	$('#addNewProperty').click(function(){
+		newPropertyRow();
+	});
+
+	function newPropertyRow(){
 		$currentNumber++;
 		$keyArray[$currentNumber] = $currentNumber;
 		$('#mainCanvas').append(`
@@ -205,7 +332,8 @@
 		</div>
 		</div>
 		`);
-	});
+	}
+
 	$('#cloneLastProperty').click(function(data){
 		$tempNum = Math.max(...$keyArray);
 		console.log($tempNum);
@@ -323,6 +451,7 @@
 			$select.value = tempArr[p+1];
 		}
 	}
+
 	
 	function sendPOSTreq(data){
 		var $data = JSON.stringify(data);
