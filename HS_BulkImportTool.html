@@ -31,9 +31,8 @@
 		.buttonbar button {width:10rem; height:2.7rem; border-radius:6px; }
 		.buttonbar .yes { background:rgb(175, 219, 175); border:1px solid green; }
 		.buttonbar .no { background:rgb(247, 167, 167); border:1px solid red; }
-		.buttonbar button:hover{
-			transform: translateY(2px);
-		}
+		.buttonbar button:hover{ transform: translateY(2px); }
+		.AS_Notif { padding-right:1rem;  font-family: 'Avenir Next LT Pro', sans-serif; font-weight:400; line-height: normal; -webkit-font-smoothing: antialiased; font-size:15px; color: #dddddd; text-transform:none; }
 	</style>
 </head>
 
@@ -57,8 +56,9 @@
 		</div>
 	</div>
 
-	<div class="topbar" style="display:flex; align-items:center;">
+	<div class="topbar" style="display:flex; align-items:center; justify-content:space-between;">
 		<svg style="fill:#ff7a59; height:76%;" id="hs-nav-v4--logo" viewBox="0 0 242.04 257" alt="Home" class="nav-logo logo"> <g class="cls-2"> <path class="cls-3" d="M162.79,101.25V82a14.84,14.84,0,0,0,8.56-13.38v-.45a14.87,14.87,0,0,0-14.83-14.83h-.45a14.87,14.87,0,0,0-14.83,14.83v.45A14.84,14.84,0,0,0,149.8,82v19.29a42.06,42.06,0,0,0-20,8.8L76.86,68.86a16.89,16.89,0,1,0-7.91,10.29L121,119.67a42.18,42.18,0,0,0,.65,47.56l-15.84,15.84a13.6,13.6,0,0,0-3.93-.64,13.75,13.75,0,1,0,13.75,13.75,13.56,13.56,0,0,0-.64-3.93l15.67-15.67a42.25,42.25,0,1,0,32.1-75.33m-6.49,63.42A21.68,21.68,0,1,1,178,143a21.68,21.68,0,0,1-21.68,21.68"></path> </g> </svg>
+		<div class="AS_Notif" id="AS_Notif">Test</div>
 	</div>
 
 	<div class="content" id="mainCanvas">
@@ -71,8 +71,8 @@
 				<button id="cloneRow1" onclick="cloneRow(1)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M366.2 256H400C461.9 256 512 306.1 512 368C512 388.9 498.6 406.7 480 413.3V464C480 490.5 458.5 512 432 512H80C53.49 512 32 490.5 32 464V413.3C13.36 406.7 0 388.9 0 368C0 306.1 50.14 256 112 256H145.8C175.7 256 200 231.7 200 201.8C200 184.3 190.8 168.5 180.1 154.8C167.5 138.5 160 118.1 160 96C160 42.98 202.1 0 256 0C309 0 352 42.98 352 96C352 118.1 344.5 138.5 331.9 154.8C321.2 168.5 312 184.3 312 201.8C312 231.7 336.3 256 366.2 256zM416 416H96V448H416V416z"/></svg></button>
 			</div>
 			<div class="creationForm" id="CF1">
-				<input type="text" placeholder="Name" id="name1"></input>
-				<input type="text" placeholder="label" id="label1"></input>
+				<input type="text" placeholder="label" onchange="createName(1)" oninput="this.onchange();" onkeyup="this.onchange();" onpaste="this.onchange();" id="label1"></input>
+				<input type="text" placeholder="name" id="name1"></input>
 				<select name="type" id="type1" "><option value="" selected="selected">Type</option><option value="number">number</option><option value="date">date</option><option value="datetime">datetime</option><option value="enumeration">enumeration</option></select>
 				<select name="fieldType" id="fieldType1" >
 					<option value="" selected="selected">Field Type</option>
@@ -130,6 +130,7 @@
 		console.log("Data exists");
 		console.log("Autosave from: " + localStorage.getItem('date'));
 		console.log(localStorage.getItem('data'));
+		$('#AS_Notif').text(`Last Autosave: ${localStorage.getItem('date')}`);
 	} else {
 		$('#autoSaveOverlay').toggle();
 		autoSave(1);
@@ -141,10 +142,11 @@
 				clearInterval(autoSaveVar);
 				break;
 			case 1:
-			autoSaveVar = setInterval(function(){
-				localStorage.setItem('data', createJSONstring());
-				localStorage.setItem('date', new Date().toLocaleString());
-			}, 5000);
+				autoSaveVar = setInterval(function(){
+					localStorage.setItem('data', createJSONstring());
+					localStorage.setItem('date', new Date().toLocaleString());
+					$('#AS_Notif').text(`Last Autosave: ${localStorage.getItem('date')}`);
+				}, 5000);
 			break;
 		}
 		return;
@@ -204,6 +206,16 @@
 			$select.value = debugArr[p];
 		}
 	})
+
+	function createName(i){
+		$('#name'+i).val(cleanName($('#label'+i).val()));
+	}
+
+	function cleanName(i){
+		var cleanedName = i.replace(/[\W_]+/g,"_");	//Replaces non alphanumeric and spaces to underscores
+		cleanedName = cleanedName.toLowerCase();	//transforms text to lowercase
+		return cleanedName;
+	}
 
 	function loadFromLocalStorage(){
 		//	Grabs data from local storage and parses it back into a JS Object
@@ -319,8 +331,8 @@
 				<button id="cloneRow${$currentNumber}" onclick="cloneRow(${$currentNumber})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M366.2 256H400C461.9 256 512 306.1 512 368C512 388.9 498.6 406.7 480 413.3V464C480 490.5 458.5 512 432 512H80C53.49 512 32 490.5 32 464V413.3C13.36 406.7 0 388.9 0 368C0 306.1 50.14 256 112 256H145.8C175.7 256 200 231.7 200 201.8C200 184.3 190.8 168.5 180.1 154.8C167.5 138.5 160 118.1 160 96C160 42.98 202.1 0 256 0C309 0 352 42.98 352 96C352 118.1 344.5 138.5 331.9 154.8C321.2 168.5 312 184.3 312 201.8C312 231.7 336.3 256 366.2 256zM416 416H96V448H416V416z"/></svg></button>
 			</div>
 		<div class="creationForm" id="CF${$currentNumber}">
+			<input type="text" placeholder="label" onchange="createName(${$currentNumber})" oninput="this.onchange();" onkeyup="this.onchange();" onpaste="this.onchange();" id="label${$currentNumber}"></input>
 			<input type="text" placeholder="Name" id="name${$currentNumber}"></input>
-			<input type="text" placeholder="label" id="label${$currentNumber}"></input>
 			<select name="type" id="type${$currentNumber}" ><option value="" selected="selected">Type</option><option value="number">number</option><option value="date">date</option><option value="datetime">datetime</option><option value="enumeration">enumeration</option></select>
 			<select name="fieldType" id="fieldType${$currentNumber}" > <option value="" selected="selected">Field Type</option> <option value="textarea">textarea</option> <option value="text">text</option> <option value="date">date</option> <option value="file">file</option> <option value="number">number</option> <option value="select">select</option> <option value="radio">radio</option> <option value="checkbox">checkbox</option> <option value="booleancheckbox">booleancheckbox</option> </select>
 			<input type="text" placeholder="groupName" id="groupName${$currentNumber}"></input>
@@ -370,8 +382,8 @@
 				<button id="cloneRow${$currentNumber}" onclick="cloneRow(${$currentNumber})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M366.2 256H400C461.9 256 512 306.1 512 368C512 388.9 498.6 406.7 480 413.3V464C480 490.5 458.5 512 432 512H80C53.49 512 32 490.5 32 464V413.3C13.36 406.7 0 388.9 0 368C0 306.1 50.14 256 112 256H145.8C175.7 256 200 231.7 200 201.8C200 184.3 190.8 168.5 180.1 154.8C167.5 138.5 160 118.1 160 96C160 42.98 202.1 0 256 0C309 0 352 42.98 352 96C352 118.1 344.5 138.5 331.9 154.8C321.2 168.5 312 184.3 312 201.8C312 231.7 336.3 256 366.2 256zM416 416H96V448H416V416z"/></svg></button>
 			</div>
 		<div class="creationForm" id="CF${$currentNumber}">
+			<input type="text" placeholder="label" onchange="createName(${$currentNumber})" oninput="this.onchange();" onkeyup="this.onchange();" onpaste="this.onchange();" id="label${$currentNumber}"></input>
 			<input type="text" placeholder="Name" id="name${$currentNumber}"></input>
-			<input type="text" placeholder="label" id="label${$currentNumber}" value="${tempArr[1]}"></input>
 			<select name="type" id="type${$currentNumber}" value="${tempArr[2]}"><option value="" selected="selected">Type</option><option value="number">number</option><option value="date">date</option><option value="datetime">datetime</option><option value="enumeration">enumeration</option></select>
 			<select name="fieldType" id="fieldType${$currentNumber}" > <option value="" selected="selected">Field Type</option> <option value="textarea">textarea</option> <option value="text">text</option> <option value="date">date</option> <option value="file">file</option> <option value="number">number</option> <option value="select">select</option> <option value="radio">radio</option> <option value="checkbox">checkbox</option> <option value="booleancheckbox">booleancheckbox</option> </select>
 			<input type="text" placeholder="groupName" id="groupName${$currentNumber}"></input>
@@ -414,7 +426,6 @@
 		
 		$currentNumber++;
 		var keyArr = [
-			'#label'+$currentNumber,
 			'#type'+$currentNumber,
 			'#fieldType'+$currentNumber,
 			'#groupName'+$currentNumber,
@@ -432,8 +443,8 @@
 				<button id="cloneRow${$currentNumber}" onclick="cloneRow(${$currentNumber})"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Pro 6.1.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --><path d="M366.2 256H400C461.9 256 512 306.1 512 368C512 388.9 498.6 406.7 480 413.3V464C480 490.5 458.5 512 432 512H80C53.49 512 32 490.5 32 464V413.3C13.36 406.7 0 388.9 0 368C0 306.1 50.14 256 112 256H145.8C175.7 256 200 231.7 200 201.8C200 184.3 190.8 168.5 180.1 154.8C167.5 138.5 160 118.1 160 96C160 42.98 202.1 0 256 0C309 0 352 42.98 352 96C352 118.1 344.5 138.5 331.9 154.8C321.2 168.5 312 184.3 312 201.8C312 231.7 336.3 256 366.2 256zM416 416H96V448H416V416z"/></svg></button>
 			</div>
 		<div class="creationForm" id="CF${$currentNumber}">
-			<input type="text" placeholder="Name" id="name${$currentNumber}"></input>
-			<input type="text" placeholder="label" id="label${$currentNumber}" value="${tempArr[1]}"></input>
+			<input type="text" placeholder="label" onchange="createName(${$currentNumber})" oninput="this.onchange();" onkeyup="this.onchange();" onpaste="this.onchange();" id="label${$currentNumber}"></input>
+			<input type="text" placeholder="name" id="name${$currentNumber}"></input>
 			<select name="type" id="type${$currentNumber}" value="${tempArr[2]}"><option value="" selected="selected">Type</option><option value="number">number</option><option value="date">date</option><option value="datetime">datetime</option><option value="enumeration">enumeration</option></select>
 			<select name="fieldType" id="fieldType${$currentNumber}" > <option value="" selected="selected">Field Type</option> <option value="textarea">textarea</option> <option value="text">text</option> <option value="date">date</option> <option value="file">file</option> <option value="number">number</option> <option value="select">select</option> <option value="radio">radio</option> <option value="checkbox">checkbox</option> <option value="booleancheckbox">booleancheckbox</option> </select>
 			<input type="text" placeholder="groupName" id="groupName${$currentNumber}"></input>
@@ -448,7 +459,7 @@
 		var $select;
 		for(p = 0; p < keyArr.length; p++){
 			$select = document.querySelector(keyArr[p]);
-			$select.value = tempArr[p+1];
+			$select.value = tempArr[p+2];
 		}
 	}
 
