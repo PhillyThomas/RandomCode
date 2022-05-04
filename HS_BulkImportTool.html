@@ -19,6 +19,8 @@
 		.buttons { display:flex; justify-content:center; margin:1rem; gap:1rem; }
 		.overlay { display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:99; position:fixed; height:100%; width:100%; background:rgba(0,0,0,0.3); backdrop-filter:blur(3px); }
 		.overlay textarea{ width:90%; height:50%; resize:none;}
+		.objectSelector { width:100%; display:flex; justify-content:center; align-items:center; gap:1rem; }
+		.objectSelector input { width:30%; }
 		.propertyRow { width:100%; display:flex; justify-content:center; align-items:center; flex-direction:row; }
 		.leftmenu { gap:5px; height:auto; width:6rem; display:flex; flex-direction:row; justify-content:center; align-items:center; flex-wrap:wrap;} 
 		.leftmenu Button { width:2rem; height:2rem; border:white; background:none; transition:440ms; padding:5px; }
@@ -63,6 +65,21 @@
 
 	<div class="content" id="mainCanvas">
 		<span class="title">Hubspot Bulk Property creation tool</span>
+
+		<div  class="objectSelector" id="objectSelector">
+			<input placeholder="Private Key" id="privateKey" type="text">
+			<input placeholder="Object Type" id="objectType" type="text" list="objectTypes" />
+			<datalist id="objectTypes">
+			<option>Contacts</option>
+			<option>Companies</option>
+			<option>Deals</option>
+			<option>Tickets</option>
+			<option>Products</option>
+			<option>Quotes</option>
+			<option>Forecast</option>
+			<option>Activities</option>
+			</datalist>
+		</div>
 
 		<!-- This is a property row -->
 		<div class="propertyRow" id="propertyRow1">
@@ -466,6 +483,10 @@
 	
 	function sendPOSTreq(data){
 		var $data = JSON.stringify(data);
+		var $objectType = $('#objectType').val();
+		var $privateKey = $('#privateKey').val();
+		console.log("$objectType: " + $objectType);
+		console.log("$privateKey: " + $privateKey);
 		console.log("$data: " + $data);
 	}
 
