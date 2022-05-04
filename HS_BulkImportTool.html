@@ -136,6 +136,7 @@
 		<button id="cloneLastProperty">Clone Last Property</button>
 		<button id="debugFill">Debug Fill</button>
 		<button id="debugDestroyLS">Delete local storage</button>
+		<button id="printLS">Debug print local storage</button>
 	</div>
 
 </body>
@@ -146,7 +147,6 @@
 	if(localStorage.getItem('data')){
 		console.log("Data exists");
 		console.log("Autosave from: " + localStorage.getItem('date'));
-		console.log(localStorage.getItem('data'));
 		$('#AS_Notif').text(`Last Autosave: ${localStorage.getItem('date')}`);
 	} else {
 		$('#autoSaveOverlay').toggle();
@@ -162,6 +162,8 @@
 				autoSaveVar = setInterval(function(){
 					localStorage.setItem('data', createJSONstring());
 					localStorage.setItem('date', new Date().toLocaleString());
+					localStorage.setItem('privateKey', getGlobalVar('privateKey'));
+					localStorage.setItem('objectType', getGlobalVar('objectType'));
 					$('#AS_Notif').text(`Last Autosave: ${localStorage.getItem('date')}`);
 				}, 5000);
 			break;
@@ -169,12 +171,23 @@
 		return;
 	}
 
+	function getGlobalVar(i){
+		return $(`#${i}`).val();
+	}
+
+	$('#printLS').click(function(){
+		console.group();
+		for (var a in localStorage) {
+			console.log(a, ' = ', localStorage[a]);
+		}
+		console.groupEnd();
+	});
+		
 	var propertyList = [];
 	var filteredPropertyList;
 	var $keyArray = [0,1];	//tracks the keys of all existing property rows. 0 = 'deleted'.
 	var $currentNumber = 1;	//tracks the current number of items used when creating properties
 	$('#overlay').toggle();
-	
 
 	$('#loadAS').click(function(){
 		$('#autoSaveOverlay').toggle();
@@ -237,6 +250,8 @@
 	function loadFromLocalStorage(){
 		//	Grabs data from local storage and parses it back into a JS Object
 		var tempData = JSON.parse(localStorage.getItem('data'));
+		document.querySelector('#privateKey').value = localStorage.getItem('privateKey');
+		document.querySelector('#objectType').value = localStorage.getItem('objectType');
 		loadJSON(tempData);
 		autoSave(1);
 	}
