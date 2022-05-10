@@ -7,6 +7,7 @@
 	<link rel='shortcut icon' href='#'>
 	<script src="https://kit.fontawesome.com/96ceb994d7.js" crossorigin="anonymous"></script>
 	<script src='https://code.jquery.com/jquery-3.6.0.min.js' integrity='sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=' crossorigin='anonymous'></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js" integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 	<title>Hubspot Bulk Property Import tool</title>
 	<style>
 		@import url('http://fonts.cdnfonts.com/css/avenir-next-lt-pro');
@@ -37,6 +38,10 @@
 		.buttonbar .no { background:rgb(247, 167, 167); border:1px solid red; }
 		.buttonbar button:hover{ transform: translateY(2px); }
 		.AS_Notif { padding-right:1rem;  font-family: 'Avenir Next LT Pro', sans-serif; font-weight:400; line-height: normal; -webkit-font-smoothing: antialiased; font-size:15px; color: #dddddd; text-transform:none; }
+		.greyBox { padding:1rem; border:1px solid #d2d4d4; background:#f5f8fa; display:flex; flex-direction:column; gap:5px;}
+		button, input[type=file]{ font-family: 'Avenir Next LT Pro', sans-serif; text-align:center; font-size:13px;}
+		.fakebutton{ text-align:center; font-family: 'Avenir Next LT Pro', sans-serif; font-size:13px; display: inline-block; border: 1px solid #4f4f4f; background: #b8b8b8; border-radius: 4px; padding: 8px 12px; color:#4f4f4f}
+		.redtxt { color:rgb(182, 17, 17); }
 	</style>
 </head>
 
@@ -68,23 +73,34 @@
 		<div class="AS_Notif" id="AS_Notif">Test</div>
 	</div>
 
+	
+
 	<!-- This is the main area containing all property rows -->
 	<div class="content" id="mainCanvas">
 		<span class="title">Hubspot Bulk Property creation tool</span>
 
 		<div  class="objectSelector" id="objectSelector">
-			<input placeholder="Private Key" id="privateKey" type="text">
-			<input placeholder="Object Type" id="objectType" type="search" list="objectTypes" />
-			<datalist id="objectTypes">
-			<option>Contacts</option>
-			<option>Companies</option>
-			<option>Deals</option>
-			<option>Tickets</option>
-			<option>Products</option>
-			<option>Quotes</option>
-			<option>Forecast</option>
-			<option>Activities</option>
-			</datalist>
+			<div class="greyBox">
+				<input placeholder="Private Key" id="privateKey" type="text">
+				<input placeholder="Object Type" id="objectType" type="search" list="objectTypes" />
+				<datalist id="objectTypes">
+				<option>Contacts</option>
+				<option>Companies</option>
+				<option>Deals</option>
+				<option>Tickets</option>
+				<option>Products</option>
+				<option>Quotes</option>
+				<option>Forecast</option>
+				<option>Activities</option>
+				</datalist>
+			</div>
+			<!-- CSV upload -->
+			<div class="greyBox">
+				<input type="file" id="myfile" name="myfile" onchange="readFile(this)">
+				<span class="fakebutton" id="submitCSVfake">Import CSV</span>
+				<button id="submitCSV" style="display:none;">Import CSV</button>
+				<button id="viewColumnHeaders" style="display:none;">View Column Headers as CSV</button>
+			</div>
 		</div>
 
 		<!-- This is a property row, the first one to be specific -->
@@ -162,6 +178,7 @@
 		<button id="debugFill">Debug Fill</button>
 		<button id="debugDestroyLS">Delete local storage</button>
 		<button id="printLS">Debug print local storage</button>
+		<button id="debugDeleteAll" onclick="clearCurrentProperties()">Debug Delete All</button>
 	</div>
 
 </body>
@@ -179,6 +196,9 @@
 
 	//Initiates the propertyList array ready to store property data
 	var propertyList = [];
+
+	//Initiates the globalCSVdata object read to store data from CSV imports
+	var globalCSVdata = new Object;
 
 	//Initiates the filteredPropertyList variable ready to store property data
 	var filteredPropertyList;
@@ -330,6 +350,25 @@
 		newPropertyRow();
 	});
 
+	//click event that shows the overlay and fills it with the correct column headers for CSV import
+	$('#viewColumnHeaders').click(function(){
+		$('#overlay').toggle();
+		$('#overlayTextArea').empty();
+		//	writes the formatted JSON to #overlayTextArea
+		$('#overlayTextArea').append(`label,type,fieldType,groupName,description,options,hasUniqueValue,hidden,formField`);
+	});
+	
+	//click event that imports data via CSV
+	$('#submitCSV').click(function(){
+		clearCurrentProperties();
+		loadJSON(globalCSVdata);
+		$('#myfile').val('');
+		$('#submitCSVfake').toggle();
+		$('#submitCSVfake').html(`Import CSV`);
+		$('#submitCSV').hide();
+		$('#viewColumnHeaders').hide();
+	});
+
 	//click event that runs when the '#cloneLastProperty' button is pressed
 	//Finds the last property that hasn't been deleted, then creates a new property and copies the values to the new property
 	//Does not copy '#label' and '#name' fields, as these must be unique
@@ -438,6 +477,80 @@
 ****		FUNCTIONS			****
 ***********************************/
 
+	//function to read the contents of a CSV file
+	function readFile(input){
+		let file = input.files[0];
+		let reader = new FileReader();
+		var errors = [];
+		const keyCheck = ["label", "type", "fieldType", "groupName", "description", "options", "hasUniqueValue", "hidden", "formField"];
+
+		reader.readAsText(file);
+
+		reader.onload = function() {
+			var csvData = $.csv.toObjects(reader.result);
+			globalCSVdata = csvData;
+			console.group();
+			console.log("data",csvData);
+			console.log("length",csvData.length);
+			if(csvData.length > 0){console.log("keys",Object.keys(csvData[0]));}
+			console.groupEnd();
+			//Hides both the real and fake buttons
+			$('#submitCSVfake').hide();
+			$('#submitCSV').hide();
+			$('#viewColumnHeaders').hide();
+
+			if(csvData.length > 0){
+				//Scans through the first object entity and checks if the column headers match the requirements
+				for(i=0; i<Object.keys(csvData[0]).length; i++){
+					if(!keyCheck.includes(Object.keys(csvData[0])[i])){
+						errors.push(Object.keys(csvData[0])[i]);
+					}
+				}
+				//If any column header is not found in the keyCheck array, raise an error and display the erroneous header in the error message
+				if(errors.length > 0){
+					console.log(errors);
+					$('#submitCSVfake').toggle();
+					$('#submitCSVfake').html(`Import CSV<br><span class="redtxt">Error: Column headers are incorrect</span>`);
+					$('#viewColumnHeaders').toggle();
+					for(i=0; i<errors.length; i++){
+						$('#submitCSVfake').append(`<br><span class="redtxt">Issue #${i+1}: '${errors[i]}'</span>`);
+					}
+					return;
+				}
+				//Shows the real button if csv length (rows in file) is gt 0
+				$('#submitCSV').toggle();
+			} else {
+				//Shows the fake button if the csv length (rows in file) is equal to or lt 0
+				//Also throws an error message explaining this
+				$('#submitCSVfake').toggle();
+				$('#submitCSVfake').html(`Import CSV <br> <span class="redtxt">Error: File contains 0 rows</span>`);
+			}
+		};
+
+		reader.onerror = function() {
+			console.log(reader.error);
+		};
+	}
+
+	//function to delete all current properties, effectively starting from scratch
+	function clearCurrentProperties(){
+		for(i=2; i<$keyArray.length; i++){
+			$('#propertyRow'+i).remove();
+		}
+		$keyArray = [];
+		$currentNumber = 1;
+		document.querySelector('#name1').value = '';
+			document.querySelector('#label1').value = '';
+			document.querySelector('#type1').value = '';
+			document.querySelector('#fieldType1').value = '';
+			document.querySelector('#groupName1').value = '';
+			document.querySelector('#description1').value = '';
+			document.querySelector('#options1').value = '';
+			document.querySelector('#hasUniqueValue1').value = '';
+			document.querySelector('#hidden1').value = '';
+			document.querySelector('#formField1').value = '';
+		}
+
 	//function to change the value of '#name' elements based on the content of the corresponding '#label' element
 	//called as an 'onchange' function from the '#label' elements
 	function createName(i){
@@ -473,7 +586,7 @@
 			newPropertyRow();
 		}
 		for(i=0; i<data.length; i++){
-			document.querySelector('#name'+(i+1)).value = data[i].name;
+			document.querySelector('#name'+(i+1)).value = cleanName(data[i].label);
 			document.querySelector('#label'+(i+1)).value = data[i].label;
 			document.querySelector('#type'+(i+1)).value = data[i].type;
 			document.querySelector('#fieldType'+(i+1)).value = data[i].fieldType;
