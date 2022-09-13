@@ -1,139 +1,173 @@
-var firstNames = [
-	[ "James", "Robert", "John", "Michael", "David", "William", "Richard", "Joseph", "Thomas", "Charles", "Christopher", "Daniel", "Matthew", "Anthony", "Mark", "Donald", "Steven", "Paul", "Andrew", "Joshua", "Kenneth", "Kevin", "Brian", "George", "Timothy", "Ronald", "Edward", "Jason", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry", "Justin", "Scott", "Brandon", "Benjamin", "Samuel", "Gregory", "Alexander", "Frank", "Patrick", "Raymond", "Jack", "Dennis", "Jerry", "Tyler", "Aaron", "Jose", "Adam", "Nathan", "Henry", "Douglas", "Zachary", "Peter", "Kyle", "Ethan", "Walter", "Noah", "Jeremy", "Christian", "Keith", "Roger", "Terry", "Gerald", "Harold", "Sean", "Austin", "Carl", "Arthur", "Lawrence", "Dylan", "Jesse", "Jordan", "Bryan", "Billy", "Joe", "Bruce", "Gabriel", "Logan", "Albert", "Willie", "Alan", "Juan", "Wayne", "Elijah", "Randy", "Roy", "Vincent", "Ralph", "Eugene", "Russell", "Bobby", "Mason", "Philip", "Louis" ],
-	[ "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Lisa", "Nancy", "Betty", "Margaret", "Sandra", "Ashley", "Kimberly", "Emily", "Donna", "Michelle", "Carol", "Amanda", "Dorothy", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura", "Cynthia", "Kathleen", "Amy", "Angela", "Shirley", "Anna", "Brenda", "Pamela", "Emma", "Nicole", "Helen", "Samantha", "Katherine", "Christine", "Debra", "Rachel", "Carolyn", "Janet", "Catherine", "Maria", "Heather", "Diane", "Ruth", "Julie", "Olivia", "Joyce", "Virginia", "Victoria", "Kelly", "Lauren", "Christina", "Joan", "Evelyn", "Judith", "Megan", "Andrea", "Cheryl", "Hannah", "Jacqueline", "Martha", "Gloria", "Teresa", "Ann", "Sara", "Madison", "Frances", "Kathryn", "Janice", "Jean", "Abigail", "Alice", "Julia", "Judy", "Sophia", "Grace", "Denise", "Amber", "Doris", "Marilyn", "Danielle", "Beverly", "Isabella", "Theresa", "Diana", "Natalie", "Brittany", "Charlotte", "Marie", "Kayla", "Alexis", "Lori" ]
-];
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title></title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="">
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+		<style>
 
-var lastNames = [ "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzales", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts", "Gomez", "Phillips", "Evans", "Turner", "Diaz", "Parker", "Cruz", "Edwards", "Collins", "Reyes", "Stewart", "Morris", "Morales", "Murphy", "Cook", "Rogers", "Gutierrez", "Ortiz", "Morgan", "Cooper", "Peterson", "Bailey", "Reed", "Kelly", "Howard", "Ramos", "Kim", "Cox", "Ward", "Richardson", "Watson", "Brooks", "Chavez", "Wood", "James", "Bennet", "Gray", "Mendoza", "Ruiz", "Hughes", "Price", "Alvarez", "Castillo", "Sanders", "Patel", "Myers", "Long", "Ross", "Foster", "Jimenez" ];
-var jobTitles = [ "Marketing Specialist", "Marketing Manager", "Marketing Director", "Graphic Designer", "Marketing Research Analyst", "Marketing Communications Manager", "Marketing Consultant", "Product Manager", "Public Relations", "Social Media Assistant", "Brand Manager", "SEO Manager", "Content Marketing Manager", "Copywriter", "Media Buyer", "Digital Marketing Manager", "eCommerce Marketing Specialist", "Brand Strategist", "Vice President of Marketing", "Media Relations Coordinator", "Administrative Assistant", "Receptionist", "Office Manager", "Auditing Clerk", "Bookkeeper", "Account Executive", "Branch Manager", "Business Manager", "Quality Control Coordinator", "Administrative Manager", "Chief Executive Officer", "Business Analyst", "Risk Manager", "Human Resources", "Office Assistant", "Secretary", "Office Clerk", "File Clerk", "Account Collector", "Administrative Specialist", "Executive Assistant", "Program Administrator", "Program Manager", "Administrative Analyst", "Data Entry", "Team Leader", "Manager", "Assistant Manager", "Executive", "Director", "Coordinator", "Administrator", "Controller", "Officer", "Organizer", "Supervisor", "Superintendent", "Head", "Overseer", "Chief", "Foreman", "Controller", "Principal", "President", "Lead", "Computer Scientist", "IT Professional", "UX Designer & UI Developer", "SQL Developer", "Web Designer", "Web Developer", "Help Desk Worker/Desktop Support", "Software Engineer", "Data Entry", "DevOps Engineer", "Computer Programmer", "Network Administrator", "Information Security Analyst", "Artificial Intelligence Engineer", "Cloud Architect", "IT Manager", "Technical Specialist", "Application Developer", "Chief Technology Officer (CTO)", "Chief Information Officer (CIO)", "Sales Associate", "Sales Representative", "Sales Manager", "Retail Worker", "Store Manager", "Sales Representative", "Sales Manager", "Real Estate Broker", "Sales Associate", "Cashier", "Store Manager", "Account Executive", "Account Manager", "Area Sales Manager", "Direct Salesperson", "Director of Inside Sales", "Outside Sales Manager", "Sales Analyst", "Market Development Manager", "B2B Sales Specialist", "Sales Engineer", "Merchandising Associate", "CEO", "Proprietor", "Principal", "Owner", "President", "Founder", "Administrator", "Director", "Managing Partner", "Managing Member", "Virtual Assistant", "Customer Service", "Customer Support", "Concierge", "Help Desk", "Customer Service Manager", "Technical Support Specialist", "Account Representative", "Client Service Specialist", "Customer Care Associate", "Operations Manager", "Operations Assistant", "Operations Coordinator", "Operations Analyst", "Operations Director", "Vice President of Operations", "Operations Professional", "Scrum Master", "Continuous Improvement Lead", "Continuous Improvement Consultant" ];
-var companyNames = [ "Daniel-Parker", "Ferry-Wuckert", "Zboncak LLC", "Kshlerin and Sons", "Bednar-Robel", "Halvorson-Okuneva", "Bergnaum, Johns and Gibson", "Hahn-Pouros", "Beatty Inc", "Hayes, Reynolds and Marvin", "Thiel, Lowe and Koelpin", "Sauer, Champlin and Price", "Tillman-Bartoletti", "Leannon LLC", "Nader LLC", "Williamson-Gerhold", "Huel Ltd", "Russel Inc", "Johns-Haag", "Rogahn Ltd", "Cummerata-Walter", "Bruen, Morissette and Howe", "Senger, Konopelski and O'Reilly", "Ullrich-Stoltenberg", "Beatty Inc", "Luettgen PLC", "Kutch-Quigley", "Stroman and Sons", "Cruickshank-Schowalter", "Luettgen, Huels and Rowe", "Barrows-Gleason", "Bradtke and Sons", "Heathcote and Sons", "Wuckert, Koelpin and Nitzsche", "Barton-Klein", "Roberts Group", "Pacocha, Murphy and DuBuque", "Schuster-Raynor", "Crooks-Weimann", "Sipes-Heller", "Jaskolski Group", "Herman-Renner", "Veum, Gulgowski and Kovacek", "Toy-Jacobi", "Strosin, Krajcik and Paucek", "Goodwin-Bins", "Towne LLC", "Senger, Kub and Bins", "Wyman, Rogahn and Becker", "Block Group", "Osinski LLC", "Schuppe, Sawayn and Mueller", "Dibbert Group", "Lebsack and Sons", "Bruen, McKenzie and Powlowski", "Marks-Cormier", "Roob, Stracke and Crooks", "Gleichner-Lynch", "Schaden-Schultz", "Quigley, Nienow and Beer", "Grimes Group", "Auer, Bergstrom and Heaney", "Hayes-Waters", "Williamson, Koepp and Smitham", "Crona-Marks", "Thompson and Sons", "Friesen, Luettgen and Rogahn", "Stokes Group", "Kub Ltd", "Pfannerstill-Morar", "Weimann Group", "Reichel-Predovic", "Will LLC", "Gaylord-Rohan", "Lubowitz-Grady", "Bosco-Rutherford", "Hansen, Greenfelder and Hane", "Rice Inc", "Kihn and Sons", "Schmidt and Sons", "Trantow PLC", "Kessler, Skiles and Altenwerth", "Pollich-Kuphal", "Parker, Mills and Gibson", "Runolfsdottir, Fay and Ortiz", "Padberg-Kohler", "Hayes-O'Hara", "Block-Sanford", "Bogan LLC", "Mosciski, Fahey and Jones", "Lowe-Conn", "Spinka-Gleason", "Kessler-Durgan", "Johnson, VonRueden and Harris", "Littel-Weissnat", "Keeling, Lakin and Pouros", "Friesen Group", "Bayer Inc", "Krajcik-Yost", "Tremblay LLC" ] 
-var emailDomains = ["danielparker.com", "ferrywuckert.co.uk", "zboncak.com", "kshlerinandsons.co.uk", "bednarrobel.co.uk", "halvorsonokuneva.co.uk", "bjg.com", "hahnpouros.co.uk", "beatty.co.uk", "hrm.co.uk", "tlk.com", "scp.co.uk", "tillmanbartoletti.co.uk", "leannon.co.uk", "nader.co.uk", "williamsongerhold.co.uk", "huel.com", "russel.co.uk", "johnshaag.co.uk", "rogahn.co.uk", "cummeratawalter.co.uk", "bmh.com", "sko.co.uk", "ullrichstoltenberg.co.uk", "beatty.co.uk", "luettgen.co.uk", "kutchquigley.com", "stromanandsons.co.uk", "cruickshankschowalter.co.uk", "lhr.co.uk", "barrowsgleason.co.uk", "bradtkeandsons.co.uk", "heathcoteandsons.co.uk", "wkn.com", "bartonklein.co.uk", "robertsgroup.co.uk", "pmd.com", "schusterraynor.co.uk", "crooksweimann.com", "sipesheller.com", "jaskolskigroup.com", "hermanrenner.com", "vgk.com", "toyjacobi.com", "skp.com", "goodwinbins.co.uk", "towne.com", "skb.com", "wrb.co.uk", "blockgroup.com", "osinski.co.uk", "ssm.co.uk", "dibbertgroup.com", "lebsackandsons.co.uk", "bmp.co.uk", "markscormier.co.uk", "rsc.co.uk", "gleichnerlynch.com", "schadenschultz.com", "qnb.com", "grimesgroup.co.uk", "abh.com", "hayeswaters.com", "wks.com", "cronamarks.com", "thompsonandsons.co.uk", "flr.com", "stokesgroup.co.uk", "kub.co.uk", "pfannerstillmorar.co.uk", "weimanngroup.co.uk", "reichelpredovic.co.uk", "will.com", "gaylordrohan.com", "lubowitzgrady.co.uk", "boscorutherford.co.uk", "hgh.com", "rice.com", "kihnandsons.com", "schmidtandsons.co.uk", "trantow.com", "ksa.com", "pollichkuphal.com", "pmg.com", "rfo.com", "padbergkohler.co.uk", "hayesohara.co.uk", "blocksanford.com", "bogan.com", "mfj.com", "loweconn.com", "spinkagleason.com", "kesslerdurgan.com", "jvh.co.uk", "littelweissnat.co.uk", "klp.com", "friesengroup.com", "bayer.co.uk", "krajcikyost.co.uk", "tremblay.com"];
-var finalDomain = [".co.uk",".com"];
+		</style>
+	</head>
+	<body>
+		<!--[if lt IE 7]>
+			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+		
+			<div>
+				<button id="refresh">refresh</button><input type="text" value="15" id="numberofrecords"><label for="numberofrecords">How many rows?</label>
+				<table id="maintable" style="margin-top:1rem;">
 
-var contOwner = [ "Philip Thomas","Elysha Shave" ];
-var sourceOfEnquiry = [ "XYZ Accountants", "ABC Accountants", "Unbiased", "VouchedFor", "Website", "Client referral", "Adviser Generated" ];
-var adviserType = [ "Looking to retire", "I'm in retirement",  "Currenty employed or in a professional career", "Business owner", "None of the above 🙂" ];
-var dealStages = [ "Initial enquiry", "Qualified", "First meeting - discovery", "Second meeting - presentation", "Implementation", "Closed won", "Closed lost" ];
+				</table>
+			</div>
 
-const jtLength = jobTitles.length;
+		<script>
+		var firstNames = [
+			[ "James", "Robert", "John", "Michael", "David", "William", "Richard", "Joseph", "Thomas", "Charles", "Christopher", "Daniel", "Matthew", "Anthony", "Mark", "Donald", "Steven", "Paul", "Andrew", "Joshua", "Kenneth", "Kevin", "Brian", "George", "Timothy", "Ronald", "Edward", "Jason", "Jeffrey", "Ryan", "Jacob", "Gary", "Nicholas", "Eric", "Jonathan", "Stephen", "Larry", "Justin", "Scott", "Brandon", "Benjamin", "Samuel", "Gregory", "Alexander", "Frank", "Patrick", "Raymond", "Jack", "Dennis", "Jerry", "Tyler", "Aaron", "Jose", "Adam", "Nathan", "Henry", "Douglas", "Zachary", "Peter", "Kyle", "Ethan", "Walter", "Noah", "Jeremy", "Christian", "Keith", "Roger", "Terry", "Gerald", "Harold", "Sean", "Austin", "Carl", "Arthur", "Lawrence", "Dylan", "Jesse", "Jordan", "Bryan", "Billy", "Joe", "Bruce", "Gabriel", "Logan", "Albert", "Willie", "Alan", "Juan", "Wayne", "Elijah", "Randy", "Roy", "Vincent", "Ralph", "Eugene", "Russell", "Bobby", "Mason", "Philip", "Louis" ],
+			[ "Mary", "Patricia", "Jennifer", "Linda", "Elizabeth", "Barbara", "Susan", "Jessica", "Sarah", "Karen", "Lisa", "Nancy", "Betty", "Margaret", "Sandra", "Ashley", "Kimberly", "Emily", "Donna", "Michelle", "Carol", "Amanda", "Dorothy", "Melissa", "Deborah", "Stephanie", "Rebecca", "Sharon", "Laura", "Cynthia", "Kathleen", "Amy", "Angela", "Shirley", "Anna", "Brenda", "Pamela", "Emma", "Nicole", "Helen", "Samantha", "Katherine", "Christine", "Debra", "Rachel", "Carolyn", "Janet", "Catherine", "Maria", "Heather", "Diane", "Ruth", "Julie", "Olivia", "Joyce", "Virginia", "Victoria", "Kelly", "Lauren", "Christina", "Joan", "Evelyn", "Judith", "Megan", "Andrea", "Cheryl", "Hannah", "Jacqueline", "Martha", "Gloria", "Teresa", "Ann", "Sara", "Madison", "Frances", "Kathryn", "Janice", "Jean", "Abigail", "Alice", "Julia", "Judy", "Sophia", "Grace", "Denise", "Amber", "Doris", "Marilyn", "Danielle", "Beverly", "Isabella", "Theresa", "Diana", "Natalie", "Brittany", "Charlotte", "Marie", "Kayla", "Alexis", "Lori" ]
+		];
 
-$('#refresh').click(function(){
-	var repetitions = $('#numberofrecords').val();
-	$('#maintable').empty();
-	createHeaders();
-	for(i = 0; i < repetitions; i++){
-		createRow();
-	}
-});
+		var lastNames = [ "Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez", "Hernandez", "Lopez", "Gonzales", "Wilson", "Anderson", "Thomas", "Taylor", "Moore", "Jackson", "Martin", "Lee", "Perez", "Thompson", "White", "Harris", "Sanchez", "Clark", "Ramirez", "Lewis", "Robinson", "Walker", "Young", "Allen", "King", "Wright", "Scott", "Torres", "Nguyen", "Hill", "Flores", "Green", "Adams", "Nelson", "Baker", "Hall", "Rivera", "Campbell", "Mitchell", "Carter", "Roberts", "Gomez", "Phillips", "Evans", "Turner", "Diaz", "Parker", "Cruz", "Edwards", "Collins", "Reyes", "Stewart", "Morris", "Morales", "Murphy", "Cook", "Rogers", "Gutierrez", "Ortiz", "Morgan", "Cooper", "Peterson", "Bailey", "Reed", "Kelly", "Howard", "Ramos", "Kim", "Cox", "Ward", "Richardson", "Watson", "Brooks", "Chavez", "Wood", "James", "Bennet", "Gray", "Mendoza", "Ruiz", "Hughes", "Price", "Alvarez", "Castillo", "Sanders", "Patel", "Myers", "Long", "Ross", "Foster", "Jimenez" ];
+		var jobTitles = [ "Marketing Specialist", "Marketing Manager", "Marketing Director", "Graphic Designer", "Marketing Research Analyst", "Marketing Communications Manager", "Marketing Consultant", "Product Manager", "Public Relations", "Social Media Assistant", "Brand Manager", "SEO Manager", "Content Marketing Manager", "Copywriter", "Media Buyer", "Digital Marketing Manager", "eCommerce Marketing Specialist", "Brand Strategist", "Vice President of Marketing", "Media Relations Coordinator", "Administrative Assistant", "Receptionist", "Office Manager", "Auditing Clerk", "Bookkeeper", "Account Executive", "Branch Manager", "Business Manager", "Quality Control Coordinator", "Administrative Manager", "Chief Executive Officer", "Business Analyst", "Risk Manager", "Human Resources", "Office Assistant", "Secretary", "Office Clerk", "File Clerk", "Account Collector", "Administrative Specialist", "Executive Assistant", "Program Administrator", "Program Manager", "Administrative Analyst", "Data Entry", "Team Leader", "Manager", "Assistant Manager", "Executive", "Director", "Coordinator", "Administrator", "Controller", "Officer", "Organizer", "Supervisor", "Superintendent", "Head", "Overseer", "Chief", "Foreman", "Controller", "Principal", "President", "Lead", "Computer Scientist", "IT Professional", "UX Designer & UI Developer", "SQL Developer", "Web Designer", "Web Developer", "Help Desk Worker/Desktop Support", "Software Engineer", "Data Entry", "DevOps Engineer", "Computer Programmer", "Network Administrator", "Information Security Analyst", "Artificial Intelligence Engineer", "Cloud Architect", "IT Manager", "Technical Specialist", "Application Developer", "Chief Technology Officer (CTO)", "Chief Information Officer (CIO)", "Sales Associate", "Sales Representative", "Sales Manager", "Retail Worker", "Store Manager", "Sales Representative", "Sales Manager", "Real Estate Broker", "Sales Associate", "Cashier", "Store Manager", "Account Executive", "Account Manager", "Area Sales Manager", "Direct Salesperson", "Director of Inside Sales", "Outside Sales Manager", "Sales Analyst", "Market Development Manager", "B2B Sales Specialist", "Sales Engineer", "Merchandising Associate", "CEO", "Proprietor", "Principal", "Owner", "President", "Founder", "Administrator", "Director", "Managing Partner", "Managing Member", "Virtual Assistant", "Customer Service", "Customer Support", "Concierge", "Help Desk", "Customer Service Manager", "Technical Support Specialist", "Account Representative", "Client Service Specialist", "Customer Care Associate", "Operations Manager", "Operations Assistant", "Operations Coordinator", "Operations Analyst", "Operations Director", "Vice President of Operations", "Operations Professional", "Scrum Master", "Continuous Improvement Lead", "Continuous Improvement Consultant" ];
+		var companyNames = [ "Daniel-Parker", "Ferry-Wuckert", "Zboncak LLC", "Kshlerin and Sons", "Bednar-Robel", "Halvorson-Okuneva", "Bergnaum, Johns and Gibson", "Hahn-Pouros", "Beatty Inc", "Hayes, Reynolds and Marvin", "Thiel, Lowe and Koelpin", "Sauer, Champlin and Price", "Tillman-Bartoletti", "Leannon LLC", "Nader LLC", "Williamson-Gerhold", "Huel Ltd", "Russel Inc", "Johns-Haag", "Rogahn Ltd", "Cummerata-Walter", "Bruen, Morissette and Howe", "Senger, Konopelski and O'Reilly", "Ullrich-Stoltenberg", "Beatty Inc", "Luettgen PLC", "Kutch-Quigley", "Stroman and Sons", "Cruickshank-Schowalter", "Luettgen, Huels and Rowe", "Barrows-Gleason", "Bradtke and Sons", "Heathcote and Sons", "Wuckert, Koelpin and Nitzsche", "Barton-Klein", "Roberts Group", "Pacocha, Murphy and DuBuque", "Schuster-Raynor", "Crooks-Weimann", "Sipes-Heller", "Jaskolski Group", "Herman-Renner", "Veum, Gulgowski and Kovacek", "Toy-Jacobi", "Strosin, Krajcik and Paucek", "Goodwin-Bins", "Towne LLC", "Senger, Kub and Bins", "Wyman, Rogahn and Becker", "Block Group", "Osinski LLC", "Schuppe, Sawayn and Mueller", "Dibbert Group", "Lebsack and Sons", "Bruen, McKenzie and Powlowski", "Marks-Cormier", "Roob, Stracke and Crooks", "Gleichner-Lynch", "Schaden-Schultz", "Quigley, Nienow and Beer", "Grimes Group", "Auer, Bergstrom and Heaney", "Hayes-Waters", "Williamson, Koepp and Smitham", "Crona-Marks", "Thompson and Sons", "Friesen, Luettgen and Rogahn", "Stokes Group", "Kub Ltd", "Pfannerstill-Morar", "Weimann Group", "Reichel-Predovic", "Will LLC", "Gaylord-Rohan", "Lubowitz-Grady", "Bosco-Rutherford", "Hansen, Greenfelder and Hane", "Rice Inc", "Kihn and Sons", "Schmidt and Sons", "Trantow PLC", "Kessler, Skiles and Altenwerth", "Pollich-Kuphal", "Parker, Mills and Gibson", "Runolfsdottir, Fay and Ortiz", "Padberg-Kohler", "Hayes-O'Hara", "Block-Sanford", "Bogan LLC", "Mosciski, Fahey and Jones", "Lowe-Conn", "Spinka-Gleason", "Kessler-Durgan", "Johnson, VonRueden and Harris", "Littel-Weissnat", "Keeling, Lakin and Pouros", "Friesen Group", "Bayer Inc", "Krajcik-Yost", "Tremblay LLC" ] 
+		var emailDomains = ["danielparker.com", "ferrywuckert.co.uk", "zboncak.com", "kshlerinandsons.co.uk", "bednarrobel.co.uk", "halvorsonokuneva.co.uk", "bjg.com", "hahnpouros.co.uk", "beatty.co.uk", "hrm.co.uk", "tlk.com", "scp.co.uk", "tillmanbartoletti.co.uk", "leannon.co.uk", "nader.co.uk", "williamsongerhold.co.uk", "huel.com", "russel.co.uk", "johnshaag.co.uk", "rogahn.co.uk", "cummeratawalter.co.uk", "bmh.com", "sko.co.uk", "ullrichstoltenberg.co.uk", "beatty.co.uk", "luettgen.co.uk", "kutchquigley.com", "stromanandsons.co.uk", "cruickshankschowalter.co.uk", "lhr.co.uk", "barrowsgleason.co.uk", "bradtkeandsons.co.uk", "heathcoteandsons.co.uk", "wkn.com", "bartonklein.co.uk", "robertsgroup.co.uk", "pmd.com", "schusterraynor.co.uk", "crooksweimann.com", "sipesheller.com", "jaskolskigroup.com", "hermanrenner.com", "vgk.com", "toyjacobi.com", "skp.com", "goodwinbins.co.uk", "towne.com", "skb.com", "wrb.co.uk", "blockgroup.com", "osinski.co.uk", "ssm.co.uk", "dibbertgroup.com", "lebsackandsons.co.uk", "bmp.co.uk", "markscormier.co.uk", "rsc.co.uk", "gleichnerlynch.com", "schadenschultz.com", "qnb.com", "grimesgroup.co.uk", "abh.com", "hayeswaters.com", "wks.com", "cronamarks.com", "thompsonandsons.co.uk", "flr.com", "stokesgroup.co.uk", "kub.co.uk", "pfannerstillmorar.co.uk", "weimanngroup.co.uk", "reichelpredovic.co.uk", "will.com", "gaylordrohan.com", "lubowitzgrady.co.uk", "boscorutherford.co.uk", "hgh.com", "rice.com", "kihnandsons.com", "schmidtandsons.co.uk", "trantow.com", "ksa.com", "pollichkuphal.com", "pmg.com", "rfo.com", "padbergkohler.co.uk", "hayesohara.co.uk", "blocksanford.com", "bogan.com", "mfj.com", "loweconn.com", "spinkagleason.com", "kesslerdurgan.com", "jvh.co.uk", "littelweissnat.co.uk", "klp.com", "friesengroup.com", "bayer.co.uk", "krajcikyost.co.uk", "tremblay.com"];
+		var finalDomain = [".co.uk",".com"];
 
-/* 
-adding in funds under managament (200k -> 2m)
-first years fees (between 500 and 4000) 
-source of inquiry randomised
-randomize deal stage
-*/
+		var contOwner = [ "Philip Thomas","Elysha Shave" ];
+		var sourceOfEnquiry = [ "XYZ Accountants", "ABC Accountants", "Unbiased", "VouchedFor", "Website", "Client referral", "Adviser Generated" ];
+		var adviserType = [ "Looking to retire", "I'm in retirement",  "Currenty employed or in a professional career", "Business owner", "None of the above 🙂" ];
+		var dealStages = [ "Initial enquiry", "Qualified", "First meeting - discovery", "Second meeting - presentation", "Implementation", "Closed won", "Closed lost" ];
 
-function createHeaders(){
-	$('#maintable').append(`
-		<tr>
-		<th>
-			First Name
-		</th>
-		<th>
-			Last Name
-		</th>
-		<th>
-		 	Contact owner
-		</th>
-		<th>
-			Job Title
-		</th>
-		<th>
-			Company Name
-		</th>
-		<th>
-			Email
-		</th>
-		<th>
-			Funds Under Management
-		</th>
-		<th>
-			First Years Fees
-		</th>
-		<th>
-			Source of Inquiry
-		</th>
-		<th>
-			Contact Advisor Type
-		</th>
-		<th>
-			Deal Stage
-		</th>
-	`);
-}
+		const jtLength = jobTitles.length;
 
-function createEmail(fn,ln,dom){
-	var path = randbetween(1,5);
-	switch(path){
-		case 1:
-			return fn+ln+"@"+dom;
-		case 2:
-			return fn.substring(0,1)+"."+ln+"@"+dom;
-		case 3:
-			return fn+ln.substring(0,1)+"@"+dom;
-		case 4:
-			return fn+"@"+dom;
-		case 5:
-			return fn.substring(0,3)+ln+"@"+dom;
-	}
-}
+		$('#refresh').click(function(){
+			var repetitions = $('#numberofrecords').val();
+			$('#maintable').empty();
+			createHeaders();
+			for(i = 0; i < repetitions; i++){
+				createRow();
+			}
+		});
 
-function randbetween(min,max){
-	return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+		/* 
+		adding in funds under managament (200k -> 2m)
+		first years fees (between 500 and 4000) 
+		source of inquiry randomised
+		randomize deal stage
+		*/
 
-function createRow(){
-	var firstName = firstNames[randbetween(0,1)][randbetween(0,99)];
-	var lastName = lastNames[randbetween(0,99)];
-	var jobTitle = jobTitles[randbetween(0,jobTitles.length-1)];
-	var companyNumber = randbetween(0,99);
-	$('#maintable').append(`
-		<tr>
-		<td>
-			${firstName}
-		</td>
-		<td>
-			${lastName}
-		</td>
-		<td>
-			${contOwner[randbetween(0,1)]}
-		</td>
-		<td>
-			${jobTitle}
-		</td>
-		<td>
-			${companyNames[companyNumber]}
-		</td>
-		<td>
-			${createEmail(firstName,lastName,emailDomains[companyNumber])}
-		</td>
-		<td>
-			£${addCommas(Math.round(randbetween(200000,2000000) / 10000) * 10000)}
-		</td>
-		<td>
-			£${addCommas(Math.round(randbetween(500,4000) / 100) * 100)}
-		</td>
-		<td>
-			${sourceOfEnquiry[randbetween(0,6)]}
-		</td>
-		<td>
-			${adviserType[randbetween(0,4)]}
-		</td>
-		<td>
-			${dealStages[randbetween(0,6)]}
-		</td>
-	`);
-}
+		function createHeaders(){
+			$('#maintable').append(`
+				<tr>
+				<th>
+					First Name
+				</th>
+				<th>
+					Last Name
+				</th>
+				<th>
+					Contact owner
+				</th>
+				<th>
+					Job Title
+				</th>
+				<th>
+					Company Name
+				</th>
+				<th>
+					Email
+				</th>
+				<th>
+					Funds Under Management
+				</th>
+				<th>
+					First Years Fees
+				</th>
+				<th>
+					Source of Inquiry
+				</th>
+				<th>
+					Contact Advisor Type
+				</th>
+				<th>
+					Deal Stage
+				</th>
+			`);
+		}
 
-function addCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
+		function createEmail(fn,ln,dom){
+			var path = randbetween(1,5);
+			switch(path){
+				case 1:
+					return fn+ln+"@"+dom;
+				case 2:
+					return fn.substring(0,1)+"."+ln+"@"+dom;
+				case 3:
+					return fn+ln.substring(0,1)+"@"+dom;
+				case 4:
+					return fn+"@"+dom;
+				case 5:
+					return fn.substring(0,3)+ln+"@"+dom;
+			}
+		}
+
+		function randbetween(min,max){
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+
+		function createRow(){
+			var firstName = firstNames[randbetween(0,1)][randbetween(0,99)];
+			var lastName = lastNames[randbetween(0,99)];
+			var jobTitle = jobTitles[randbetween(0,jobTitles.length-1)];
+			var companyNumber = randbetween(0,99);
+			$('#maintable').append(`
+				<tr>
+				<td>
+					${firstName}
+				</td>
+				<td>
+					${lastName}
+				</td>
+				<td>
+					${contOwner[randbetween(0,1)]}
+				</td>
+				<td>
+					${jobTitle}
+				</td>
+				<td>
+					${companyNames[companyNumber]}
+				</td>
+				<td>
+					${createEmail(firstName,lastName,emailDomains[companyNumber])}
+				</td>
+				<td>
+					£${addCommas(Math.round(randbetween(200000,2000000) / 10000) * 10000)}
+				</td>
+				<td>
+					£${addCommas(Math.round(randbetween(500,4000) / 100) * 100)}
+				</td>
+				<td>
+					${sourceOfEnquiry[randbetween(0,6)]}
+				</td>
+				<td>
+					${adviserType[randbetween(0,4)]}
+				</td>
+				<td>
+					${dealStages[randbetween(0,6)]}
+				</td>
+			`);
+		}
+
+		function addCommas(x) {
+		    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	</script>
+	</body>
+</html>
